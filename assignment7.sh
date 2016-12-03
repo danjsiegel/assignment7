@@ -15,7 +15,7 @@
 		echo "	4 -- Change Directory"
 		echo "	5 -- Long List of visible files in current directory"
 		echo "	6 -- Display current time and Date and Calendar"
-		echo "	7 -- start vi editory"
+		echo "	7 -- Start vi editor"
 		echo "	8 -- Email a file to a user"
 		echo -e "	9 -- Exit Program\n"
 		
@@ -52,15 +52,15 @@
 
 		4) 
 			clear
-			read -p "Enter a directory" userdirectory
+			read -p "Enter a directory " userdirectory
 			if [ -z $userdirectory ] #-z Checks to make sure the variable is not empty, if it is, it directs you home
 				then
 				echo "you didn't specify a directory. Taking you to your home directory"
 				cd ~
-			elif [ $userdirectory = "`" ] #if the user directory is ~, use the eval command to execute the command
+			elif [ $userdirectory = "~" ] #if the user directory is ~, use the eval command to execute the command
 				then 
 				eval cd "$userdirectory"
-			elif [ $userdirectory = "$HOME" ] #if the user directory selected is $HOME, uses the eval command to execute the command
+			elif [ $userdirectory = \$HOME ] #if the user directory selected is $HOME, uses the eval command to execute the command
 				then
 				eval cd "$userdirectory"
 			elif [ -d $userdirectory ] #checks to make sure the path is a directory, then it changes your directory
@@ -71,6 +71,35 @@
 			fi
 			;;
 
+		5)
+			ls -l | more #uses the LS command with long format argument, piped into a more to command to make readable
+			;;
+		6)  #displays current time and calendar date
+			clear
+			date
+			cal
+			;;
+		7)
+			clear
+			read -p "Please type the name of a file you'd like to open in vi " filetovi
+			if [ -z $filetovi ] #if the input is empty 
+				then 
+				echo "you need to enter a file name"
+			elif [ -a $filetovi ] #if the file exists
+				then 
+				asciicheck=$(file "$filetovi" | grep -o ASCII)
+				if [ -z $asciicheck ]
+				then
+				echo "not a valid file type"
+				else
+				vi $filetovi 
+				fi
+				
+			else 
+				vi $filetovi #file doesn't exist, create a new file with that name
+				
+			fi
+			;;
 		9) #takes you out of the program
 			clear
 			echo "thank you"
