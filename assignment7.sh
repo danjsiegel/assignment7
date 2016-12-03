@@ -51,57 +51,29 @@
 			;;
 
 		4) 
-			
-
-		a|A)   #collects a subject, recipient, attachment, and a message you'd like to send to a user" 
 			clear
-			read -p "subject: " subject
-			read -p "recipient: " recep
-			read -p "attachment: " attachment
-			read -p "your message: " message
-			currentdir=$(pwd)
-			echo ""$message"" | mail -s ""$subject"" -a "$attachment" "$recep"
-			;;
-		b|B) #gives list of all logged in users
-			clear
-			finger | more -10
-			;;
-
-		c|C) #gives the date
-			clear
-			date
-			;;
-		d|D) #gives the calendar 
-			clear
-			cal
-			;;
-		e|E) #gives the current working directory
-			clear
-			pwd
-			;;	
-		f|F) #lists contents of current directory
-			clear
-			ls
-			;;
-		g|G) #requests a web address and performs an ip lookup
-			clear
-			read -p "Name of website: " webaddress
-			nslookup "$webaddress"
-			;;
-		h|H) #gives you your fortune
-			clear
-			fortune
-			;;
-		i|I) #cat's a file
-			clear
-			read -p "Name of your file: " filetocat
-			currentdir=$(pwd)
-			"$currentdir"/"$filetocat"
+			read -p "Enter a directory" userdirectory
+			if [ -z $userdirectory ] #-z Checks to make sure the variable is not empty, if it is, it directs you home
+				then
+				echo "you didn't specify a directory. Taking you to your home directory"
+				cd ~
+			elif [ $userdirectory = "`" ] #if the user directory is ~, use the eval command to execute the command
+				then 
+				eval cd "$userdirectory"
+			elif [ $userdirectory = "$HOME" ] #if the user directory selected is $HOME, uses the eval command to execute the command
+				then
+				eval cd "$userdirectory"
+			elif [ -d $userdirectory ] #checks to make sure the path is a directory, then it changes your directory
+				then
+				cd $userdirectory
+			else 
+				echo "I don't know what $userdirectory is, but it sure isn't a directory"
+			fi
 			;;
 
-		1) #takes you out of the program
+		9) #takes you out of the program
 			clear
-			echo "thank you"	
+			echo "thank you"
 			;;
 		*) #catch all condition, if not a-j
 			clear
